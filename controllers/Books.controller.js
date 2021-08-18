@@ -13,24 +13,21 @@ const gitBook = (req,res)=>{
     });
   }
  
-  const createBook =()=>{
-    let data={
-        email:req.body["email"],
-        title:req.body["title"],
-        descripyion:req.body["descripyion"],
-        status:req.body["status"]
-    }
-    userModel.find({email:email},(err,data) =>{
+  const createBook =(req,res)=>{
+    console.log(req.body)
+    //let {email,title ,description , status } = req.body
+    userModel.findOne({email:req.body.email},(err,userdata) =>{
         if(err){
                 res.send('no data ',error)
         }else{
-            data[0].books.push({
-                title: title,
-                descripyion:descripyion,
-                status:status
+            userdata.books.push({
+                title: req.body.title,
+                description:req.body.description ,
+                status:req.body.status
             })
-            data[0].save();
-            res.send(data[0].books);
+           
+            userdata.save();
+            res.json(userdata);
         }
     })
 
@@ -41,11 +38,24 @@ const gitBook = (req,res)=>{
 
   }
 
-  const deleteBook = () =>{
-console.log("delete book");
+  const deleteBook = (req,res) =>{
+//console.log("delete book");
+userModel.findOne({ email: req.query.email }, (error, userdata) => {
+  console.log(req.params.id)
+  console.log( req.query.email)
+  if (error) {
+    res.send(error)
+  } else {
+   userdata.books.splice(req.params.id, 1);
+  
+   userdata.save();
+    res.send(userdata.book);
   }
 
+});
+  }
 
+  
 
 
 module.exports={gitBook , createBook , deleteBook }
