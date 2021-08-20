@@ -18,7 +18,7 @@ mongoose.connect("mongodb://localhost:27017/bookdb", {
 })
 const PORT = process.env.PORT;
 
-const {gitBook , createBook , deleteBook } = require('./controllers/Books.controller')
+const {gitBook , createBook , deleteBook, editbook } = require('./controllers/Books.controller')
 
 const client = jwksClient({
   // this url comes from your app on the auth0 dashboard 
@@ -61,5 +61,5 @@ app.get('/test', (request, response) => {
 app.get('/books',gitBook);
 app.post("/addbooks",createBook);
 app.delete("/delbooks/:id",deleteBook);
-
+app.put("/editbook/:id", editbook)
 app.listen(8000, () => console.log(`listening on 8000`));
